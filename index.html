@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        h1 {
+            font-size: 45px;
+            color:#ffffff;
+            font-family: 'Comic Sans MS', cursive;
+        }
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            margin: 0;
+            padding: 0;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 17px;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.5s;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        #timer {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        #buttons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        button {
+            padding: 20px 30px;
+            font-size: 18px;
+            font-family: 'Comic Sans MS', cursive;
+            background-color: #ffffff; /* Calmer color scheme */
+            color: #061310; /* Darker text color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        button:hover {
+            background-color: #d0a2d5; /* Lighter shade on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> ⋆｡˚⋆ฺ  Pomodoro Timer ⋆ฺ｡˚⋆</h1>
+    
+        <div id="timer">60:00</div>
+        <div id="buttons">
+            <button id="start">Start</button>
+            <button id="reset">Reset</button>
+            
+        </div>
+        <br></br>
+
+        <div>
+            <label for="timer-type">Select Timer:</label>
+            <select id="timer-type">
+                <option value="pomodoro">Pomodoro (1 hour)</option>
+                <option value="short-break">Short Break (10 minutes)</option>
+                <option value="long-break">Long Break (35 minutes)</option>
+            </select>
+        </div>
+        <p></p>
+        <div>
+            <label for="background-type">Select Background:</label>
+            <select id="background-type">
+                <option value="forest">Calm Forest</option>
+                <option value="mountain">Mighty Mountain</option>
+                <option value="sky">Sky High</option>
+            </select>
+        </div>
+        <br></br>
+        <div>
+            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6zCID88oNjNv9zx6puDHKj?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 60 * 60;
+        let timerInterval;
+        let backgroundImage = 'forest';
+
+        function startTimer() {
+            timerInterval = setInterval(updateTimer, 1000);
+            document.getElementById('start').disabled = true;
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                alert('Time is up!');
+                document.getElementById('start').disabled = false;
+            } else {
+                timeLeft--;
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 60 * 60;
+            document.getElementById('timer').innerText = '60:00';
+            document.getElementById('start').disabled = false;
+        }
+
+        function changeBackground() {
+            const backgroundType = document.getElementById('background-type').value;
+            document.body.style.backgroundImage = `url('img/${backgroundType}bg.png')`;
+            backgroundImage = backgroundType;
+        }
+
+        function setTimer() {
+            const timerType = document.getElementById('timer-type').value;
+            switch (timerType) {
+                case 'pomodoro':
+                    timeLeft = 60 * 60;
+                    document.getElementById('timer').innerText = '60:00';
+                    break;
+                case 'short-break':
+                    timeLeft = 10 * 60;
+                    document.getElementById('timer').innerText = '10:00';
+                    break;
+                case 'long-break':
+                    timeLeft = 35 * 60;
+                    document.getElementById('timer').innerText = '35:00';
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        document.getElementById('start').addEventListener('click', startTimer);
+        document.getElementById('reset').addEventListener('click', resetTimer);
+        document.getElementById('background-type').addEventListener('change', changeBackground);
+        document.getElementById('timer-type').addEventListener('change', setTimer);
+
+        // Initial setup
+        changeBackground();
+        setTimer();
+    </script>
+
+    
+</body>
+</html>
